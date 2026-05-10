@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const userSchema =new mongoose.Schema({
     _id:{
         type:String,
-        required:true
+        default: () => new mongoose.Types.ObjectId().toString(),
     },
 
     username:{
@@ -12,23 +12,28 @@ const userSchema =new mongoose.Schema({
     },
     email:{
         type:String,
-        required:true
+        required:true,
+        lowercase: true,
+        trim: true,
+        unique: true,
     },
     image:{
         type:String,
-        required:true
+        default: "",
+    },
+    passwordHash: {
+        type: String,
+        select: false,
     },
     role:{
         type:String,
         enum: ["user","hotelOwner"],
         default:"user"
     },
-    recentSearchCities:[
-        {
-            type:String,
-            required:true
-        }
-    ]
+    recentSearchedCities:{
+        type: [String],
+        default: [],
+    },
 
 },{timestamps:true});
 
